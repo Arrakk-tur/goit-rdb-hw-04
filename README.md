@@ -93,3 +93,30 @@ _p2_adding_data.png_
 ![p2_adding_data.png](./p2_adding_data.png)
 
 ---
+
+### Завдання 3:
+
+> Перейдіть до бази даних, з якою працювали у темі 3. Напишіть запит за допомогою операторів FROM та INNER JOIN, що об'єднує всі таблиці даних, які ми завантажили з файлів: order_details, orders, customers, products, categories, employees, shippers, suppliers. Для цього ви маєте знайти спільні ключі.
+>
+> Перевірте правильність виконання запиту.
+
+---
+
+```sql
+SELECT *
+FROM order_details
+INNER JOIN orders ON order_details.order_id = orders.id
+INNER JOIN customers ON orders.customer_id = customers.id
+INNER JOIN employees ON orders.employee_id = employees.employee_id
+INNER JOIN shippers ON orders.shipper_id = shippers.id
+INNER JOIN products ON order_details.product_id = products.id
+INNER JOIN categories ON products.category_id = categories.id
+INNER JOIN suppliers ON products.supplier_id = suppliers.id;
+```
+
+**Results:** [p3.csv](./p3.csv)
+
+_p3_join.png_
+![p3_join.png](./p3_join.png)
+
+---
