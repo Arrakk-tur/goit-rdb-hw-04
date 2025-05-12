@@ -120,3 +120,146 @@ _p3_join.png_
 ![p3_join.png](./p3_join.png)
 
 ---
+
+### Завдання 4:
+
+> Виконайте запити, перелічені нижче.
+>
+> - Визначте, скільки рядків ви отримали (за допомогою оператора COUNT).
+> - Змініть декілька операторів INNER на LEFT чи RIGHT. Визначте, що відбувається з кількістю рядків. Чому? Напишіть відповідь у текстовому файлі.
+> - На основі запита з пункта 3 виконайте наступне: оберіть тільки ті рядки, де employee_id > 3 та ≤ 10.
+> - Згрупуйте за іменем категорії, порахуйте кількість рядків у групі, середню кількість товару (кількість товару знаходиться в order_details.quantity)
+> - Відфільтруйте рядки, де середня кількість товару більша за 21.
+> - Відсортуйте рядки за спаданням кількості рядків.
+> - Виведіть на екран (оберіть) чотири рядки з пропущеним першим рядком.
+
+---
+
+#### 1. Кількість рядків
+
+```sql
+SELECT COUNT(*) AS total_rows
+FROM order_details
+INNER JOIN orders ON order_details.order_id = orders.id
+INNER JOIN customers ON orders.customer_id = customers.id
+INNER JOIN employees ON orders.employee_id = employees.employee_id
+INNER JOIN shippers ON orders.shipper_id = shippers.id
+INNER JOIN products ON order_details.product_id = products.id
+INNER JOIN categories ON products.category_id = categories.id
+INNER JOIN suppliers ON products.supplier_id = suppliers.id;
+```
+
+_p4_count.png_
+![p4_count.png](./p4_count.png)
+
+---
+
+#### 2. Заміна JOIN
+
+```sql
+
+```
+
+_p4_count.png_
+![p4_count.png](./p4_count.png)
+
+---
+
+#### 3. Фільтрація employee_id
+
+```sql
+SELECT *
+FROM order_details
+INNER JOIN orders ON order_details.order_id = orders.id
+INNER JOIN customers ON orders.customer_id = customers.id
+INNER JOIN employees ON orders.employee_id = employees.employee_id
+INNER JOIN shippers ON orders.shipper_id = shippers.id
+INNER JOIN products ON order_details.product_id = products.id
+INNER JOIN categories ON products.category_id = categories.id
+INNER JOIN suppliers ON products.supplier_id = suppliers.id
+WHERE employees.employee_id > 3 AND employees.employee_id <= 10;
+```
+
+_p4_filter_employee_id.png_
+![p4_filter_employee_id.png](./p4_filter_employee_id.png)
+
+---
+
+#### 4. Групування за іменем категорії
+
+```sql
+SELECT categories.name AS category_name,
+       COUNT(*) AS row_count,
+       AVG(order_details.quantity) AS avg_quantity
+FROM order_details
+INNER JOIN products ON order_details.product_id = products.id
+INNER JOIN categories ON products.category_id = categories.id
+GROUP BY categories.name;
+```
+
+_p4_group_by_category.png_
+![p4_group_by_category.png](./p4_group_by_category.png)
+
+---
+
+#### 5. Фільтрація avg_quantity
+
+```sql
+SELECT categories.name AS category_name,
+       COUNT(*) AS row_count,
+       AVG(order_details.quantity) AS avg_quantity
+FROM order_details
+INNER JOIN products ON order_details.product_id = products.id
+INNER JOIN categories ON products.category_id = categories.id
+GROUP BY categories.name
+HAVING AVG(order_details.quantity) > 21;
+```
+
+_p4_filter_avg_quantity_21.png_
+![p4_filter_avg_quantity_21.png](./p4_filter_avg_quantity_21.png)
+
+З значенням "21" фільтрація не відпрацьовує коректно, тому створив додатковий запит зі значенням "22".
+
+_p4_filter_avg_quantity_22.png_
+![p4_filter_avg_quantity_22.png](./p4_filter_avg_quantity_22.png)
+
+---
+
+#### 6. Сортування за спаданням кількості рядків
+
+```sql
+SELECT categories.name AS category_name,
+       COUNT(*) AS row_count,
+       AVG(order_details.quantity) AS avg_quantity
+FROM order_details
+INNER JOIN products ON order_details.product_id = products.id
+INNER JOIN categories ON products.category_id = categories.id
+GROUP BY categories.name
+HAVING AVG(order_details.quantity) > 21
+ORDER BY row_count DESC;
+```
+
+_p4_ordered.png_
+![p4_ordered.png](./p4_ordered.png)
+
+---
+
+#### 7. OFFSET
+
+```sql
+SELECT categories.name AS category_name,
+       COUNT(*) AS row_count,
+       AVG(order_details.quantity) AS avg_quantity
+FROM order_details
+INNER JOIN products ON order_details.product_id = products.id
+INNER JOIN categories ON products.category_id = categories.id
+GROUP BY categories.name
+HAVING AVG(order_details.quantity) > 21
+ORDER BY row_count DESC
+LIMIT 4 OFFSET 1;
+```
+
+_p4_offset.png_
+![p4_offset.png](./p4_offset.png)
+
+---
