@@ -157,11 +157,21 @@ _p4_count.png_
 #### 2. Заміна JOIN
 
 ```sql
-
+SELECT COUNT(*) AS row_count
+FROM order_details
+LEFT JOIN orders ON order_details.order_id = orders.id
+LEFT JOIN customers ON orders.customer_id = customers.id
+LEFT JOIN employees ON orders.employee_id = employees.employee_id
+LEFT JOIN shippers ON orders.shipper_id = shippers.id
+RIGHT JOIN products ON order_details.product_id = products.id
+RIGHT JOIN categories ON products.category_id = categories.id
+INNER JOIN suppliers ON products.supplier_id = suppliers.id;
 ```
 
-_p4_count.png_
-![p4_count.png](./p4_count.png)
+В результаті підрахунку з'явився додатковий рядок який містить невідповідні данні. Рядок був доданий в таблицю "order_details".
+
+_p4_change_join.png_
+![pp4_change_join.png](./p4_change_join.png)
 
 ---
 
